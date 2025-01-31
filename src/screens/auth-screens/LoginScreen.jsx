@@ -27,7 +27,7 @@ const LoginScreen = () => {
       <View className="my-4 justify-between items-center">
         <Image
           source={require('../../assets/images/logo.webp')}
-          className="h-36 w-36"
+          className="h-24 w-24"
         />
         <CustomText font="bold" className="text-white text-3xl mt-3 font-bold">
           PingPong.chat

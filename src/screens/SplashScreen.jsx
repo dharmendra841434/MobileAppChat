@@ -3,12 +3,21 @@ import React, {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import appColors from '../constant/appColors';
 import CustomText from '../components/CustomText';
+import Storage from '../utils/AsyncStorage';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
   useEffect(() => {
-    setTimeout(() => {
-      navigation.navigate('dashboard');
+    setTimeout(async () => {
+      let token = await Storage.getItem('token');
+
+      console.log(token);
+
+      if (token) {
+        navigation.navigate('dashboard');
+      } else {
+        navigation.navigate('onboarding');
+      }
     }, 3000);
   }, []);
 

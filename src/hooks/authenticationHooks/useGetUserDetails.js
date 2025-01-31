@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useQuery } from "@tanstack/react-query";
-import { getUserDetails } from "../ApiRequiests/userApi";
+import {useQuery} from '@tanstack/react-query';
+import {getUserDetails} from '../ApiRequiests/userApi';
 
 const useGetUserDetails = () => {
   // Use the createdBy value in the query
@@ -11,11 +11,11 @@ const useGetUserDetails = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["userDetails"], // Unique key for caching
+    queryKey: ['userDetails'], // Unique key for caching
     queryFn: () => getUserDetails(), // Fetch function
   });
 
-  return { userDetails, isLoading, isError, error };
+  return {userDetails, isLoading, isError, error};
 };
 
 export default useGetUserDetails;

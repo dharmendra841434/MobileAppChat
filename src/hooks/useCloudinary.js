@@ -8,13 +8,19 @@ const useCloudinaryUpload = () => {
   const [error, setError] = useState(null);
   const [progress, setProgress] = useState(0); // New state for progress
 
-  const uploadFile = async file => {
+  const uploadFile = async fileData => {
     setLoading(true);
     setError(null);
     setProgress(0); // Reset progress before starting
 
+    const {uri, fileName, type} = fileData;
+
     const data = new FormData();
-    data.append('file', file);
+    data.append('file', {
+      uri,
+      name: fileName, // Use extracted file name
+      type, // Use extracted MIME type
+    });
     data.append('upload_preset', 'mystore');
     data.append('folder', 'chatSystem');
 
@@ -23,6 +29,9 @@ const useCloudinaryUpload = () => {
         'https://api.cloudinary.com/v1_1/devtrendy/image/upload',
         data,
         {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
           onUploadProgress: progressEvent => {
             const percentCompleted = Math.round(
               (progressEvent.loaded / progressEvent.total) * 100,
@@ -31,7 +40,7 @@ const useCloudinaryUpload = () => {
           },
         },
       );
-      setUrl(res.data.url);
+      setUrl(res.data.secure_url);
       return res.data.secure_url;
     } catch (err) {
       console.error('Error uploading image: ', err);
@@ -41,12 +50,12 @@ const useCloudinaryUpload = () => {
 
       // Show error toast
       Toast.show({
-        type: 'error', // Type of toast
-        text1: 'Upload Failed', // Main message
-        text2: errorMessage, // Secondary message (error details)
-        position: 'top', // Position of the toast
-        visibilityTime: 3000, // Duration of the toast
-        autoHide: true, // Auto-hide the toast
+        type: 'error',
+        text1: 'Upload Failed',
+        text2: errorMessage,
+        position: 'top',
+        visibilityTime: 3000,
+        autoHide: true,
       });
     } finally {
       setLoading(false);

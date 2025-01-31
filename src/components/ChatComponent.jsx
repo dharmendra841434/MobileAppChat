@@ -1,12 +1,15 @@
 import React, {useRef} from 'react';
 import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {timeAgo} from '../utils/helper';
+import CustomText from './CustomText';
+import CircleProgress from './CircleProgress';
 
 const ChatComponent = ({
   messages,
   userDetails,
   handleViewProfile,
   scrollRef,
+  progress,
 }) => {
   return (
     <ScrollView ref={scrollRef} className="flex-1  py-1">
@@ -55,15 +58,31 @@ const ChatComponent = ({
                       ? 'bg-purple-100 rounded-tr-none self-end'
                       : 'bg-gray-100 rounded-tl-none self-start'
                   }`}>
-                  <Image
-                    source={{uri: message?.mediaFile?.url}}
-                    className="w-32 h-32 rounded-lg"
-                  />
+                  <View className=" overflow-hidden rounded-lg">
+                    <Image
+                      source={{uri: message?.mediaFile?.url}}
+                      className="w-36 h-36 rounded-lg"
+                    />
+                    {!message?.mediaFile.url.includes('cloudinary') && (
+                      <View className=" absolute top-0 left-0 right-0 bottom-0 bg-gray-900/70">
+                        <View className=" items-center justify-center h-full">
+                          {/* <CustomText className=" text-white">
+                            {progress}%
+                          </CustomText> */}
+                          <CircleProgress
+                            progress={progress}
+                            size={70}
+                            strokeWidth={3}
+                          />
+                        </View>
+                      </View>
+                    )}
+                  </View>
                   <Text className="text-gray-500 text-xs mt-1">
                     {timeAgo(message.timestamp)}
                   </Text>
-                  {typeof message?.mediaFile?.url !== 'string' && (
-                    <Text>{progress}%</Text>
+                  {typeof message?.mediaFile.url !== 'string' && (
+                    <p>{progress}%</p>
                   )}
                 </View>
               )}

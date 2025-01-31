@@ -3,7 +3,7 @@ import Toast from 'react-native-toast-message'; // Import the toast library
 import {loginRequest} from '../ApiRequiests/userApi';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Replace localStorage with AsyncStorage
 import {useNavigation} from '@react-navigation/native'; // Replace next/navigation with React Navigation
-
+import Storage from '../../utils/AsyncStorage';
 const useLoginUser = () => {
   const navigation = useNavigation(); // Use React Navigation instead of Next.js router
 
@@ -25,13 +25,7 @@ const useLoginUser = () => {
         autoHide: true, // Auto-hide the toast
       });
 
-      // Save token to AsyncStorage
-      try {
-        await AsyncStorage.setItem('token', data?.data?.token);
-      } catch (error) {
-        console.error('Failed to save token:', error);
-      }
-
+      await Storage.setItem('token', data?.data?.token);
       // Navigate to the dashboard
       navigation.navigate('dashboard'); // Replace with your screen name
     },
