@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -12,30 +12,59 @@ import CustomText from '../../components/CustomText';
 import {timeAgo} from '../../utils/helper';
 import {useNavigation} from '@react-navigation/native';
 import ChatLoader from '../../components/loader/ChatLoader';
+import TopHeader from '../../components/TopHeader';
+import useGetUserDetails from '../../hooks/authenticationHooks/useGetUserDetails';
+import GroupsListCard from '../../components/groups/GroupsList';
+import {useSocket} from '../../utils/SocketProvider';
+import useInvalidateQuery from '../../hooks/useInvalidateQuery';
+import UserProfile from '../../components/peoples/UserProfile';
+import CustomBottomSheet from '../../components/CustomBottomSheet';
 
 const tabs = ['All', 'Unread', 'Favourites', 'Groups'];
 
 export default function ChatsScreen() {
   const [activeTab, setActiveTab] = useState('All');
   const navigation = useNavigation();
-
+  const {userDetails} = useGetUserDetails();
   const {groupsList, isLoading} = useGetUserGroupsList();
+  const [allChats, setAllChats] = useState();
+  const invalidateQuery = useInvalidateQuery();
+  const [viewProfile, setViewProfile] = useState(false);
   //console.log(groupsList);
+  // Update allChats when userDetails or groupsList change
+  const socket = useSocket();
+  useEffect(() => {
+    if (
+      userDetails?.allFriends?.length > 0 ||
+      groupsList?.data?.groups?.length > 0
+    ) {
+      //setAllChats([...userDetails, ...groupsList]); // Merging both arrays
+    }
+  }, [userDetails, groupsList]);
+
+  useEffect(() => {
+    socket.on('receiveMessages', ({messages}) => {
+      invalidateQuery('groupsList');
+    });
+  }, [socket]);
 
   return (
     <View className="flex-1 bg-background">
-      {/* Header */}
-      <View className="h-16 flex-row justify-between items-center px-4">
-        <Text className="text-white text-2xl font-bold">Chats</Text>
-        <View className="flex-row space-x-4">
-          <View className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
-            <Image
-              className=" h-9 w-9 rounded-full "
-              source={require('../../assets/images/defaultDp.webp')}
+      <TopHeader title="Chats" handleViewProfile={() => setViewProfile(true)} />
+
+      <CustomBottomSheet
+        isVisible={viewProfile}
+        onClose={() => setViewProfile(false)}
+        sheetHeight={350}
+        renderContent={() => (
+          <>
+            <UserProfile
+              user={userDetails?.data?.user}
+              setView={setViewProfile}
             />
-          </View>
-        </View>
-      </View>
+          </>
+        )}
+      />
 
       {/* Search */}
       <View className="px-4 py-2">
@@ -75,45 +104,9 @@ export default function ChatsScreen() {
             keyExtractor={item => item._id}
             className="flex-1 mt-2"
             renderItem={({item}) => (
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => {
-                  navigation.navigate('startgroupchat', {group: item});
-                }}
-                className="flex-row items-center px-4 py-5 border-b border-gray-600">
-                <Image
-                  source={require('../../assets/images/defaultDp.webp')}
-                  className="w-12 h-12 rounded-full"
-                />
-                <View className="flex-1 ml-3">
-                  <Text className="text-white text-lg font-semibold capitalize">
-                    {item.groupName}
-                  </Text>
-                  {item?.messages?.length > 0 && (
-                    <View className=" text-xs">
-                      {item?.messages[item?.messages?.length - 1]?.mediaFile !==
-                      null ? (
-                        <CustomText className=" text-gray-400 text-sm">
-                          Photo
-                        </CustomText>
-                      ) : (
-                        <CustomText className="text-xs  text-gray-400 ">
-                          {item?.messages[item.messages?.length - 1]?.message}
-                        </CustomText>
-                      )}
-                    </View>
-                  )}
-                </View>
-                <View className="items-end">
-                  {item?.messages?.length > 0 && (
-                    <Text className="text-gray-400 text-xs">
-                      {timeAgo(
-                        item?.messages[item.messages?.length - 1]?.timestamp,
-                      )}
-                    </Text>
-                  )}
-                </View>
-              </TouchableOpacity>
+              <>
+                <GroupsListCard item={item} />
+              </>
             )}
           />
         </>

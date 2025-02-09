@@ -3,17 +3,14 @@ import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {timeAgo} from '../utils/helper';
 import CustomText from './CustomText';
 import CircleProgress from './CircleProgress';
-import ProfileIcon from './ProfileIcon';
 
-const ChatComponent = ({
+const UserChatMessages = ({
   messages,
   userDetails,
   handleViewProfile,
   scrollRef,
   progress,
 }) => {
-  //console.log(messages, 'uturyyiyu');
-
   return (
     <ScrollView ref={scrollRef} className="flex-1  py-1">
       {messages?.length === 0 ? (
@@ -24,31 +21,26 @@ const ChatComponent = ({
             <View
               key={index}
               className={`flex mb-1 p-2 rounded-lg w-full ${
-                message?.username === userDetails?.data?.user?.username
+                message?.username === userDetails?.data?.username
                   ? 'flex-row-reverse'
                   : 'flex-row'
               }`}>
               <TouchableOpacity
                 onPress={() => handleViewProfile(message?.username)}>
-                {/* <Image
+                <Image
                   source={{
                     uri:
-                      message?.username === userDetails?.data?.user?.username
+                      message?.username === userDetails?.data?.username
                         ? 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
                         : 'https://static.vecteezy.com/system/resources/thumbnails/000/439/863/small/Basic_Ui__28186_29.jpg',
                   }}
                   className="w-10 h-10 rounded-full"
-                /> */}
-
-                <ProfileIcon
-                  fullName={message?.username}
-                  className=" h-10 w-10"
                 />
               </TouchableOpacity>
               {message?.message !== '' ? (
                 <View
                   className={`flex flex-col mx-3 max-w-[75%] px-4 py-3 rounded-xl ${
-                    message?.username === userDetails?.data?.user?.username
+                    message?.username === userDetails?.data?.username
                       ? 'bg-purple-100 rounded-tr-none self-end'
                       : 'bg-gray-100 rounded-tl-none self-start'
                   }`}>
@@ -62,7 +54,7 @@ const ChatComponent = ({
               ) : (
                 <View
                   className={`flex flex-col mx-3 max-w-[75%] px-4 py-3 rounded-xl ${
-                    message?.username === userDetails?.data?.user?.username
+                    message?.username === userDetails?.data?.username
                       ? 'bg-purple-100 rounded-tr-none self-end'
                       : 'bg-gray-100 rounded-tl-none self-start'
                   }`}>
@@ -99,4 +91,4 @@ const ChatComponent = ({
   );
 };
 
-export default ChatComponent;
+export default UserChatMessages;

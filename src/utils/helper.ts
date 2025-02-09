@@ -15,6 +15,16 @@ export const timeAgo = (timestamp: any) => {
   return `${diffInDays} days ago`;
 };
 
+export function getInitials(fullName: any) {
+  // console.log('====================================');
+  // console.log(fullName);
+  // console.log('====================================');
+  return fullName
+    ?.split(' ') // Split the name into words
+    ?.map((word: any) => word?.charAt(0)?.toUpperCase()) // Get first letter of each word and uppercase it
+    ?.join(''); // Join them together
+}
+
 const handleMediaSelection = async (type = 'camera') => {
   return new Promise((resolve, reject) => {
     const options = {

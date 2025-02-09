@@ -10,6 +10,9 @@ import DashboardScreen from '../screens/dashboard/DashboardScreen';
 import BottomNavigation from './BottomNavigation';
 import ChatsScreen from '../screens/dashboard/ChatsScreen';
 import StartChat from '../screens/dashboard/StartChat';
+import SearchPeoples from '../screens/dashboard/SearchPeoples';
+import NotificationScreen from '../screens/Notification';
+import StartuserChat from '../screens/dashboard/StartuserChat';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,7 +27,10 @@ export default function AppStack() {
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="register" component={RegisterScreen} />
         <Stack.Screen name="startgroupchat" component={StartChat} />
+        <Stack.Screen name="startuserchat" component={StartuserChat} />
+        <Stack.Screen name="searchpeoples" component={SearchPeoples} />
         <Stack.Screen name="dashboard" component={BottomNavigation} />
+        <Stack.Screen name="notification" component={NotificationScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

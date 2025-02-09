@@ -13,6 +13,8 @@ const LoginScreen = () => {
   const {loginUser, success, isLoading, LoginError} = useLoginUser();
 
   const handleLogin = () => {
+    console.log('sakhfyasdi');
+
     loginUser({
       data: {
         username,

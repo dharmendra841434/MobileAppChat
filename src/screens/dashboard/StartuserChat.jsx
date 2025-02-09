@@ -20,20 +20,20 @@ import handleMediaSelection from '../../utils/helper';
 import useCloudinaryUpload from '../../hooks/useCloudinary';
 import {useQueryClient} from '@tanstack/react-query';
 import InfoPopup from '../../components/InfoPopup';
-import UserProfile from '../../components/peoples/UserProfile';
 import {getUserProfile} from '../../hooks/ApiRequiests/userApi';
+import UserProfile from '../../components/peoples/UserProfile';
 
-export default function StartChat({route}) {
+export default function StartuserChat({route}) {
   const [messages, setMessages] = useState('');
   const [input, setInput] = useState('');
-  const {group} = route.params;
+  const {userChat, targetedUser} = route.params;
   const navigation = useNavigation();
   const chatContainerRef = useRef(null);
   const {userDetails} = useGetUserDetails();
   const socket = useSocket();
   const [viweModal, setViweModal] = useState(false);
   const {progress, uploadFile} = useCloudinaryUpload();
-  const queryClient = useQueryClient();
+
   const [iButtonView, setiButtonView] = useState(false);
   const [showUserInfo, setShowUserInfo] = useState(null);
 
@@ -41,7 +41,7 @@ export default function StartChat({route}) {
     if (input.trim()) {
       const data = {
         message: input,
-        groupKey: group?.groupKey,
+        chatKey: userChat?.chatKey,
         username: userDetails?.data?.user?.username,
       };
 
@@ -54,9 +54,9 @@ export default function StartChat({route}) {
 
       // Add the new message object to the state
       setMessages(prevMessages => [...prevMessages, newMessage]);
-      socket.emit('chatMessage', data);
+      socket.emit('sendUserMessage', data);
       setInput('');
-      queryClient.invalidateQueries(['groupsList']);
+      //queryClient.invalidateQueries(['groupsList']);
     }
   };
 
@@ -76,45 +76,49 @@ export default function StartChat({route}) {
     await uploadFile(file).then(result => {
       console.log(result, 'result');
       const data = {
-        groupKey: group.groupKey,
+        chatKey: userChat?.chatKey,
         username: userDetails?.data?.user?.username,
         mediaFile: {
           mediaType: 'image',
           url: result,
         },
       };
-      socket.emit('chatMessage', data);
-      queryClient.invalidateQueries(['groupsList']);
+      // console.log(data, 'new msg');
+
+      socket.emit('sendUserMessage', data);
+      //queryClient.invalidateQueries(['groupsList']);
     });
   };
 
   // Auto-scroll to the bottom when messages change
   useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollToEnd({animated: true});
+    if (chatContainerRef?.current) {
+      chatContainerRef?.current?.scrollToEnd({animated: true});
     }
   }, [messages]);
 
   useEffect(() => {
     const data = {
-      groupKey: group?.groupKey,
-      username: 'You',
+      chatKey: userChat?.chatKey,
+      username: targetedUser?.username,
     };
-    socket.emit('joinGroup', data);
+    socket.emit('joinChat', data);
 
-    socket.on('joinedGroup', ({message, messages}) => {
+    socket.on('joinedChat', ({message, messages}) => {
       console.log(message);
       setMessages(messages);
     });
 
-    socket.on('receiveMessages', ({messages}) => {
+    socket.on('receiveUserMessages', ({messages}) => {
       console.log(messages, 'messages');
       setMessages(messages);
       setInput('');
     });
 
     return () => {
-      socket.off('joinGroup');
+      socket.off('joinChat');
+      socket.off('joinedChat');
+      socket.off('receiveUserMessages');
     };
   }, [socket]);
 
@@ -141,10 +145,13 @@ export default function StartChat({route}) {
       console.log(error);
     }
   };
+
   const handleViewProfile = async username => {
     const profile = await getUserProfile(username);
     setShowUserInfo(profile);
   };
+
+  //  console.log(messages, 'thgis isgsh');
 
   return (
     <View className="flex-1 bg-white">
@@ -190,6 +197,8 @@ export default function StartChat({route}) {
         )}
       />
 
+      <InfoPopup isOpen={iButtonView} setIsOpen={setiButtonView} />
+
       <CustomBottomSheet
         isVisible={showUserInfo != null}
         onClose={() => setShowUserInfo(null)}
@@ -197,17 +206,15 @@ export default function StartChat({route}) {
         renderContent={() => (
           <>
             <UserProfile
+              user={showUserInfo}
               setView={() => {
                 setShowUserInfo(null);
               }}
-              user={showUserInfo}
               currentUser={userDetails?.data}
             />
           </>
         )}
       />
-
-      <InfoPopup isOpen={iButtonView} setIsOpen={setiButtonView} />
 
       {/* Header */}
       <View
@@ -224,7 +231,7 @@ export default function StartChat({route}) {
           />
         </TouchableOpacity>
         <Text className="text-white px-3 capitalize text-lg font-bold">
-          {group?.groupName}
+          {targetedUser?.full_name}
         </Text>
         <View className="flex-row space-x-4">
           <TouchableOpacity
@@ -248,9 +255,7 @@ export default function StartChat({route}) {
           userDetails={userDetails}
           messages={messages}
           progress={progress}
-          handleViewProfile={data => {
-            handleViewProfile(data);
-          }}
+          handleViewProfile={handleViewProfile}
         />
 
         {/* Input Field */}

@@ -1,4 +1,4 @@
-import React, {useRef, useLayoutEffect} from 'react';
+import React, {useRef, useEffect} from 'react';
 import {
   Modal,
   Pressable,
@@ -66,7 +66,7 @@ const CustomBottomSheet = ({
     }).start();
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (isVisible) {
       translateY.setValue(sheetHeight);
       overlayOpacity.setValue(0);
@@ -86,14 +86,15 @@ const CustomBottomSheet = ({
         }),
       ]).start();
     }
-  }, [isVisible, sheetHeight]);
+  }, [isVisible]);
 
   return (
     <Modal
       visible={isVisible}
       onRequestClose={handleCloseModal}
       transparent
-      statusBarTranslucent>
+      statusBarTranslucent
+      animationType="fade">
       <TouchableWithoutFeedback onPress={handleCloseModal}>
         <Animated.View style={[styles.overlay, {opacity: overlayOpacity}]} />
       </TouchableWithoutFeedback>

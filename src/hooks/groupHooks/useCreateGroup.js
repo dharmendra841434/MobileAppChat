@@ -2,7 +2,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 import Toast from 'react-native-toast-message'; // Import the toast library
 import {createGroupRequest} from '../ApiRequiests/userApi';
 
-const useCreateGroup = () => {
+const useCreateGroup = setVisible => {
   const queryClient = useQueryClient(); // Get the query client instance
   const {
     mutate: createGroup,
@@ -19,6 +19,7 @@ const useCreateGroup = () => {
         autoHide: true, // Auto-hide the toast
       });
       queryClient.invalidateQueries(['groupsList']);
+      setVisible(false);
     },
     onError: error => {
       Toast.show({
@@ -29,6 +30,7 @@ const useCreateGroup = () => {
         visibilityTime: 3000, // Duration of the toast
         autoHide: true, // Auto-hide the toast
       });
+      setVisible(false);
     },
   });
 
