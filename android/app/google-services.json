@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "19261653214",
+    "project_id": "pingpong-8a4de",
+    "storage_bucket": "pingpong-8a4de.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19261653214:android:8255991d9abe383fc0c24f",
+        "android_client_info": {
+          "package_name": "com.pingpong"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBo5HLZCV0RXqDh3TTCuI1woueu0f5furM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

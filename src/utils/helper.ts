@@ -77,3 +77,23 @@ const handleMediaSelection = async (type = 'camera') => {
 };
 
 export default handleMediaSelection;
+
+export const hasUserReadLastMessage = (group: any, user: any) => {
+  const userId = user?._id;
+  // console.log(!group?.messages?.length, 'khdjashd');
+
+  if (!group?.messages?.length || !userId) {
+    return true; // No messages or userId provided
+  }
+  const lastMessage = group.messages[group.messages.length - 1];
+
+  return lastMessage?.read?.includes(userId) ? true : false;
+};
+
+export function countUnreadMessages(messages: any, userId: any) {
+  if (!Array.isArray(messages)) {
+    throw new Error('Invalid messages array');
+  }
+
+  return messages.filter(message => !message.read.includes(userId)).length;
+}

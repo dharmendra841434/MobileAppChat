@@ -1,15 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  FlatList,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, TextInput, FlatList, TouchableOpacity} from 'react-native';
 import useGetUserGroupsList from '../../hooks/groupHooks/useGetUserGroupsList';
-import CustomText from '../../components/CustomText';
-import {timeAgo} from '../../utils/helper';
 import {useNavigation} from '@react-navigation/native';
 import ChatLoader from '../../components/loader/ChatLoader';
 import TopHeader from '../../components/TopHeader';
@@ -24,10 +15,8 @@ const tabs = ['All', 'Unread', 'Favourites', 'Groups'];
 
 export default function ChatsScreen() {
   const [activeTab, setActiveTab] = useState('All');
-  const navigation = useNavigation();
   const {userDetails} = useGetUserDetails();
   const {groupsList, isLoading} = useGetUserGroupsList();
-  const [allChats, setAllChats] = useState();
   const invalidateQuery = useInvalidateQuery();
   const [viewProfile, setViewProfile] = useState(false);
   //console.log(groupsList);
@@ -103,11 +92,7 @@ export default function ChatsScreen() {
             data={groupsList?.data?.groups}
             keyExtractor={item => item._id}
             className="flex-1 mt-2"
-            renderItem={({item}) => (
-              <>
-                <GroupsListCard item={item} />
-              </>
-            )}
+            renderItem={({item}) => <GroupsListCard item={item} />}
           />
         </>
       )}

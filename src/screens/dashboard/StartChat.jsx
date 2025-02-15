@@ -22,6 +22,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import InfoPopup from '../../components/InfoPopup';
 import UserProfile from '../../components/peoples/UserProfile';
 import {getUserProfile} from '../../hooks/ApiRequiests/userApi';
+import useInvalidateQuery from '../../hooks/useInvalidateQuery';
 
 export default function StartChat({route}) {
   const [messages, setMessages] = useState('');
@@ -36,6 +37,7 @@ export default function StartChat({route}) {
   const queryClient = useQueryClient();
   const [iButtonView, setiButtonView] = useState(false);
   const [showUserInfo, setShowUserInfo] = useState(null);
+  const invalidateQuery = useInvalidateQuery();
 
   const handleSendMessage = () => {
     if (input.trim()) {
@@ -43,6 +45,7 @@ export default function StartChat({route}) {
         message: input,
         groupKey: group?.groupKey,
         username: userDetails?.data?.user?.username,
+        userId: userDetails?.data?.user?._id,
       };
 
       const newMessage = {
@@ -50,6 +53,7 @@ export default function StartChat({route}) {
         message: input,
         mediaFile: null,
         timestamp: new Date().toISOString(), // Use current timestamp
+        userId: userDetails?.data?.user?._id,
       };
 
       // Add the new message object to the state
@@ -98,17 +102,19 @@ export default function StartChat({route}) {
   useEffect(() => {
     const data = {
       groupKey: group?.groupKey,
-      username: 'You',
+      username: userDetails?.data?.user?.username,
+      userId: userDetails?.data?.user?._id,
     };
     socket.emit('joinGroup', data);
 
     socket.on('joinedGroup', ({message, messages}) => {
-      console.log(message);
+      // console.log(message);
       setMessages(messages);
+      invalidateQuery('groupsList');
     });
 
     socket.on('receiveMessages', ({messages}) => {
-      console.log(messages, 'messages');
+      //console.log(messages, 'messages');
       setMessages(messages);
       setInput('');
     });

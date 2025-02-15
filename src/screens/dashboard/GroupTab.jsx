@@ -1,24 +1,17 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  FlatList,
-} from 'react-native';
+import {View, Text, TouchableOpacity, TextInput, FlatList} from 'react-native';
 import React, {useState} from 'react';
 import CustomText from '../../components/CustomText';
 import CustomBottomSheet from '../../components/CustomBottomSheet';
 import appColors from '../../constant/appColors';
 import useCreateGroup from '../../hooks/groupHooks/useCreateGroup';
 import useJoinGroup from '../../hooks/groupHooks/useJoinGroup';
-import {timeAgo} from '../../utils/helper';
 import {useNavigation} from '@react-navigation/native';
 import useGetUserGroupsList from '../../hooks/groupHooks/useGetUserGroupsList';
 import ProfileIcon from '../../components/ProfileIcon';
-import {useInfiniteQuery} from '@tanstack/react-query';
-import useInvalidateQuery from '../../hooks/useInvalidateQuery';
 import TopHeader from '../../components/TopHeader';
+import useGetUserDetails from '../../hooks/authenticationHooks/useGetUserDetails';
+import GroupsListCard from '../../components/groups/GroupsList';
+import messaging from '@react-native-firebase/messaging';
 
 const GroupTab = () => {
   const [expanded, setExpanded] = useState(false);
@@ -26,6 +19,7 @@ const GroupTab = () => {
   const [groupName, setGroupName] = useState('');
   const [groupCode, setGroupCode] = useState('');
   const {groupsList, isLoading} = useGetUserGroupsList();
+  const {userDetails} = useGetUserDetails();
   const navigation = useNavigation();
 
   const {createGroup, createGroupLoading, createGroupSuccess} =
@@ -34,15 +28,19 @@ const GroupTab = () => {
   const {joinGroup, joinGroupLoading, joinGroupSuccess} =
     useJoinGroup(setExpanded);
 
-  const handleCreate = () => {
-    createGroup({groupName: groupName});
+  const handleCreate = async () => {
+    const deviceToken = await messaging().getToken();
+    createGroup({groupName: groupName, deviceToken: deviceToken});
     setGroupName('');
   };
 
-  const handleJoin = () => {
-    joinGroup({groupKey: groupCode});
+  const handleJoin = async () => {
+    const deviceToken = await messaging().getToken();
+    joinGroup({groupKey: groupCode, deviceToken: deviceToken});
     setGroupCode('');
   };
+
+  //console.log(groupsList, 'list');
 
   return (
     <View className="flex-1 bg-background">
@@ -147,54 +145,7 @@ const GroupTab = () => {
           keyExtractor={item => item._id}
           scrollEnabled={true}
           className="flex-1 mt-2"
-          renderItem={({item}) => (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => {
-                navigation.navigate('startgroupchat', {group: item});
-              }}
-              className="flex-row  px-4 py-5 border-b border-gray-600">
-              {/* <Image
-                source={require('../../assets/images/defaultDp.webp')}
-                className="w-12 h-12 rounded-full"
-              /> */}
-              <ProfileIcon
-                fullName={item.groupName}
-                color={item?.groupIconColor}
-              />
-              <View className="flex-1 ml-3">
-                <CustomText className="text-white text-lg font-semibold capitalize">
-                  {item.groupName}
-                </CustomText>
-                {item?.messages?.length > 0 && (
-                  <View className=" text-xs">
-                    {item?.messages[item?.messages?.length - 1]?.mediaFile !==
-                    null ? (
-                      <CustomText className=" text-gray-400 text-sm">
-                        Photo
-                      </CustomText>
-                    ) : (
-                      <CustomText
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                        className="text-xs  text-gray-400 ">
-                        {item?.messages[item.messages?.length - 1]?.message}
-                      </CustomText>
-                    )}
-                  </View>
-                )}
-              </View>
-              <View className="items-end">
-                {item?.messages?.length > 0 && (
-                  <CustomText className="text-gray-400 text-xs">
-                    {timeAgo(
-                      item?.messages[item.messages?.length - 1]?.timestamp,
-                    )}
-                  </CustomText>
-                )}
-              </View>
-            </TouchableOpacity>
-          )}
+          renderItem={({item}) => <GroupsListCard item={item} />}
         />
       </View>
     </View>

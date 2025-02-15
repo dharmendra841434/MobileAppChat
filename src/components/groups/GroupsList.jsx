@@ -1,11 +1,18 @@
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {timeAgo} from '../../utils/helper';
+import {
+  countUnreadMessages,
+  hasUserReadLastMessage,
+  timeAgo,
+} from '../../utils/helper';
 import ProfileIcon from '../ProfileIcon';
+import useGetUserDetails from '../../hooks/authenticationHooks/useGetUserDetails';
+import CustomText from '../CustomText';
 
 const GroupsListCard = ({item}) => {
   const navigation = useNavigation();
+  const {userDetails} = useGetUserDetails();
 
   return (
     <TouchableOpacity
@@ -13,42 +20,62 @@ const GroupsListCard = ({item}) => {
       onPress={() => {
         navigation.navigate('startgroupchat', {group: item});
       }}
-      className="flex-row items-center px-4 py-5 border-b border-gray-600">
-      {/* <Image
-        source={require('../../assets/images/defaultDp.webp')}
-        className="w-12 h-12 rounded-full"
-      /> */}
-      <ProfileIcon
-        fullName={item?.groupName || 'Unknown Group'}
-        color={item?.groupIconColor}
-      />
-      <View className="flex-1 ml-3">
-        <Text className="text-white text-lg font-semibold capitalize">
-          {item?.groupName || 'Unknown Group'}
-        </Text>
+      className={`flex-row   px-4 py-5 border-b border-gray-600 ${
+        !hasUserReadLastMessage(item, userDetails?.data?.user)
+          ? 'bg-green-100/50'
+          : 'bg-transparent'
+      }`}>
+      <ProfileIcon fullName={item.groupName} color={item?.groupIconColor} />
+      <View className="flex-1 ml-3 ">
+        <CustomText className="text-white text-xl font-bold capitalize">
+          {item.groupName}
+        </CustomText>
         {item?.messages?.length > 0 && (
-          <View>
-            {item?.messages[item.messages.length - 1]?.mediaFile ? (
-              <Text className="text-gray-400 text-sm">Photo</Text>
+          <View className={` text-xs `}>
+            {item?.messages[item?.messages?.length - 1]?.mediaFile !== null ? (
+              <CustomText
+                className={` text-sm  ${
+                  !hasUserReadLastMessage(item, userDetails?.data?.user)
+                    ? ' text-gray-900 font-bold'
+                    : ' text-gray-400 '
+                }`}>
+                Photo
+              </CustomText>
             ) : (
-              <Text
+              <CustomText
                 numberOfLines={1}
                 ellipsizeMode="tail"
-                className="text-xs text-gray-400">
-                {item?.messages[item.messages.length - 1]?.message ||
-                  'No recent messages'}
-              </Text>
+                className={` text-sm  ${
+                  !hasUserReadLastMessage(item, userDetails?.data?.user)
+                    ? ' text-gray-900 font-bold'
+                    : ' text-gray-400 '
+                }`}>
+                {item?.messages[item.messages?.length - 1]?.message}
+              </CustomText>
             )}
           </View>
         )}
       </View>
       <View className="items-end">
         {item?.messages?.length > 0 && (
-          <Text className="text-gray-400 text-xs">
-            {timeAgo(item.messages[item.messages.length - 1]?.timestamp) || ''}
-          </Text>
+          <CustomText
+            className={` text-sm  ${
+              !hasUserReadLastMessage(item, userDetails?.data?.user)
+                ? ' text-gray-900 font-bold'
+                : ' text-gray-400 '
+            }`}>
+            {timeAgo(item?.messages[item.messages?.length - 1]?.timestamp)}
+          </CustomText>
         )}
       </View>
+      {countUnreadMessages(item?.messages, userDetails?.data?.user?._id) >
+        0 && (
+        <View className=" h-7 w-7 bg-red-600 rounded-full absolute right-5 bottom-4  flex items-center justify-center">
+          <CustomText className=" text-white">
+            {countUnreadMessages(item?.messages, userDetails?.data?.user?._id)}
+          </CustomText>
+        </View>
+      )}
     </TouchableOpacity>
   );
 };
