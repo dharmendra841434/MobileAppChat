@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {View, TextInput, TouchableOpacity} from 'react-native';
 import CustomText from './CustomText';
 import appColors from '../constant/appColors';
+import appFonts from '../constant/appFonts';
 
 const PasswordInputField = ({
   value,
@@ -19,7 +20,7 @@ const PasswordInputField = ({
 
   return (
     <View>
-      <CustomText font="bold" className="text-white text-lg my-2 ml-3">
+      <CustomText font="bold" className="text-white  my-2 ml-3">
         {title}
       </CustomText>
       <View
@@ -33,9 +34,10 @@ const PasswordInputField = ({
           className="flex-1 py-5 placeholder:text-gray-500"
           value={value}
           onChangeText={onChangeText}
+          style={{fontFamily: appFonts.Typo_Round_Regular}}
         />
         <TouchableOpacity onPress={togglePasswordVisibility}>
-          <CustomText font="bold" className="text-black">
+          <CustomText className="text-black text-sm">
             {isPasswordVisible ? 'hide' : 'show'}
           </CustomText>
         </TouchableOpacity>

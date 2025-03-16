@@ -14,6 +14,10 @@ import appColors from '../../constant/appColors';
 import {useNavigation} from '@react-navigation/native';
 import PasswordInputField from '../../components/PasswordInput';
 import useLoginUser from '../../hooks/authenticationHooks/useLogin';
+import appFonts from '../../constant/appFonts';
+import LoaderKit from 'react-native-loader-kit';
+import LottieView from 'lottie-react-native';
+import AppLogo from '../../components/AppLogo';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -36,17 +40,7 @@ const LoginScreen = () => {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View className="flex-1 bg-background p-6">
         {/* Header */}
-        <View className="my-4 justify-between items-center">
-          <Image
-            source={require('../../assets/images/logo.webp')}
-            className="h-24 w-24"
-          />
-          <CustomText
-            font="bold"
-            className="text-white text-3xl mt-3 font-bold">
-            PingPong.chat
-          </CustomText>
-        </View>
+        <AppLogo />
 
         {/* Welcome Back */}
         <View className="mb-6 mt-10">
@@ -59,15 +53,16 @@ const LoginScreen = () => {
         {/* Input Fields */}
         <View className="space-y-4 mb-6">
           <View>
-            <CustomText font="bold" className="text-white text-lg my-2 ml-3">
+            <CustomText font="bold" className="text-white  my-2 ml-3">
               Username
             </CustomText>
             <TextInput
               placeholder="Enter your username"
               cursorColor={appColors.dark}
-              className="bg-gray-300 rounded-xl px-4 py-5 placeholder:text-gray-500"
+              className="bg-gray-300 rounded-xl px-4  py-5 placeholder:text-gray-500"
               value={username}
               onChangeText={setUsername}
+              style={{fontFamily: appFonts.Typo_Round_Regular}}
             />
           </View>
           <PasswordInputField value={password} onChangeText={setPassword} />
@@ -78,19 +73,42 @@ const LoginScreen = () => {
           <View className="flex-row items-center">
             <CustomText className="text-white ml-2">Remember me</CustomText>
           </View>
-          <CustomText className="text-white">Forget password?</CustomText>
+          <CustomText className=" text-secondary">Forget password?</CustomText>
         </View>
 
         {/* Login Button */}
         <TouchableOpacity
-          className="bg-primary py-4 rounded-full mb-6"
+          className="bg-primary py-4 rounded-full mb-6 items-center justify-center"
           disabled={isLoading}
           onPress={handleLogin}>
-          <CustomText
-            font="bold"
-            className="text-black text-center text-lg font-bold">
-            {isLoading ? 'Logging in...' : 'Login'}
-          </CustomText>
+          {isLoading ? (
+            <View className=" flex flex-row  items-center justify-center">
+              <CustomText
+                font="bold"
+                className="text-black text-center text-lg mr-2 ">
+                Logining
+              </CustomText>
+              <LoaderKit
+                style={{width: 20, height: 20}}
+                name={'LineScalePulseOut'} // Optional: see list of animations below
+                color={appColors.background} // Optional: color can be: 'red', 'green',... or '#ddd', '#ffffff',...
+              />
+              <LoaderKit
+                style={{width: 20, height: 20}}
+                name={'LineScalePulseOut'} // Optional: see list of animations below
+                color={appColors.background} // Optional: color can be: 'red', 'green',... or '#ddd', '#ffffff',...
+              />
+              <LoaderKit
+                style={{width: 20, height: 20}}
+                name={'LineScalePulseOut'} // Optional: see list of animations below
+                color={appColors.background} // Optional: color can be: 'red', 'green',... or '#ddd', '#ffffff',...
+              />
+            </View>
+          ) : (
+            <CustomText font="bold" className="text-black text-center text-lg ">
+              Login
+            </CustomText>
+          )}
         </TouchableOpacity>
 
         {/* Sign Up */}

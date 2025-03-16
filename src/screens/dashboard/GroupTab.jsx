@@ -12,6 +12,7 @@ import TopHeader from '../../components/TopHeader';
 import useGetUserDetails from '../../hooks/authenticationHooks/useGetUserDetails';
 import GroupsListCard from '../../components/groups/GroupsList';
 import messaging from '@react-native-firebase/messaging';
+import appFonts from '../../constant/appFonts';
 
 const GroupTab = () => {
   const [expanded, setExpanded] = useState(false);
@@ -62,6 +63,7 @@ const GroupTab = () => {
                       <TextInput
                         onChangeText={setGroupName}
                         value={groupName}
+                        style={{fontFamily: appFonts.Typo_Round_Regular}}
                         placeholder="Enter Group Name"
                         cursorColor={appColors.background}
                         className=" border py-4 border-background rounded-xl placeholder:text-gray-400 pl-4"
@@ -86,6 +88,7 @@ const GroupTab = () => {
                     <View className=" mt-8">
                       <TextInput
                         onChangeText={setGroupCode}
+                        style={{fontFamily: appFonts.Typo_Round_Regular}}
                         value={groupCode}
                         placeholder="Enter Group Code"
                         className=" border border-background rounded-xl placeholder:text-gray-400 pl-4"
@@ -112,8 +115,9 @@ const GroupTab = () => {
       {/* Search */}
       <View className="px-4 py-2">
         <TextInput
-          placeholder="Ask Meta AI or Search"
+          placeholder="Here search your groups"
           placeholderTextColor="#6b7280"
+          style={{fontFamily: appFonts.Typo_Round_Regular}}
           className="h-14 px-4 bg-gray-300 rounded-lg text-white"
         />
       </View>
@@ -125,9 +129,7 @@ const GroupTab = () => {
             setExpanded(!expanded);
             setSelectedOption('create');
           }}>
-          <CustomText className="text-background font-bold">
-            Create New Group
-          </CustomText>
+          <CustomText className="text-background ">Create New Group</CustomText>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.6}
@@ -136,7 +138,9 @@ const GroupTab = () => {
             setExpanded(!expanded);
             setSelectedOption('join');
           }}>
-          <Text className="text-background font-bold">Join Existing Group</Text>
+          <CustomText className="text-background ">
+            Join Existing Group
+          </CustomText>
         </TouchableOpacity>
       </View>
       <View className=" h-[75%]">

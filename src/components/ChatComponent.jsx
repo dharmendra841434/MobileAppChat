@@ -52,12 +52,12 @@ const ChatComponent = ({
                       ? 'bg-purple-100 rounded-tr-none self-end'
                       : 'bg-gray-100 rounded-tl-none self-start'
                   }`}>
-                  <Text className="text-sm text-gray-700">
+                  <CustomText className="text-sm text-gray-700">
                     {message.message}
-                  </Text>
-                  <Text className="text-gray-500 text-xs mt-1">
+                  </CustomText>
+                  <CustomText className="text-gray-500 text-xs mt-1">
                     {timeAgo(message?.timestamp)}
-                  </Text>
+                  </CustomText>
                 </View>
               ) : (
                 <View
@@ -83,9 +83,9 @@ const ChatComponent = ({
                       </View>
                     )}
                   </View>
-                  <Text className="text-gray-500 text-xs mt-1">
+                  <CustomText className="text-gray-500 text-xs mt-1">
                     {timeAgo(message?.timestamp)}
-                  </Text>
+                  </CustomText>
                   {typeof message?.mediaFile?.url !== 'string' && (
                     <CustomText>{progress}%</CustomText>
                   )}

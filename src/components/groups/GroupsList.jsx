@@ -27,7 +27,7 @@ const GroupsListCard = ({item}) => {
       }`}>
       <ProfileIcon fullName={item.groupName} color={item?.groupIconColor} />
       <View className="flex-1 ml-3 ">
-        <CustomText className="text-white text-xl font-bold capitalize">
+        <CustomText className="text-white text-xl  capitalize">
           {item.groupName}
         </CustomText>
         {item?.messages?.length > 0 && (

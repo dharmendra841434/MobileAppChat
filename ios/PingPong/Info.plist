@@ -49,15 +49,9 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>JockeyOne-Regular.ttf</string>
-		<string>Ubuntu-Bold.ttf</string>
-		<string>Ubuntu-BoldItalic.ttf</string>
-		<string>Ubuntu-Italic.ttf</string>
-		<string>Ubuntu-Light.ttf</string>
-		<string>Ubuntu-LightItalic.ttf</string>
-		<string>Ubuntu-Medium.ttf</string>
-		<string>Ubuntu-MediumItalic.ttf</string>
-		<string>Ubuntu-Regular.ttf</string>
+		<string>Typo_Round_Bold_Demo.otf</string>
+		<string>Typo_Round_Regular_Demo.otf</string>
+		<string>Typo_Round_Thin_Demo.otf</string>
 	</array>
 </dict>
 </plist>

@@ -27,12 +27,17 @@ const App = () => {
   useEffect(() => {
     // getFCMToken();
     requestUserPermission();
+    // getFCMToken();
   }, []);
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log(remoteMessage, 'tmt');
+
       if (remoteMessage?.notification) {
         const {title, body} = remoteMessage.notification;
+
+        console.log('jgyffyt');
 
         showToast(
           'info',

@@ -17,14 +17,14 @@ const NotificationScreen = ({route}) => {
       className="flex-row items-center p-4 mb-3 bg-gray-200 rounded-xl  border border-gray-200">
       {/* Circular Avatar with Initials */}
       <View className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mr-4">
-        <Text className="text-lg font-bold text-white uppercase">
+        <CustomText className="text-lg  text-white uppercase">
           {getInitials(full_name)}
-        </Text>
+        </CustomText>
       </View>
 
       {/* Notification Message */}
       <View className=" flex flex-row items-center gap-x-1">
-        <CustomText className=" text-lg font-bold text-gray-800">
+        <CustomText font="bold" className=" text-lg  text-gray-800">
           {full_name}
         </CustomText>
         <CustomText className=" font-medium text-gray-800">
@@ -49,9 +49,9 @@ const NotificationScreen = ({route}) => {
             source={require('../assets/images/back.webp')}
           />
         </TouchableOpacity>
-        <Text className="text-white px-3 capitalize text-lg font-bold">
+        <CustomText font="bold" className="text-white px-3 capitalize text-lg ">
           Notifications
-        </Text>
+        </CustomText>
       </View>
       <FlatList
         data={notifications}

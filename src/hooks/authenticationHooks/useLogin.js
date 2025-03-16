@@ -30,6 +30,8 @@ const useLoginUser = () => {
       navigation.navigate('dashboard'); // Replace with your screen name
     },
     onError: error => {
+      console.log(error);
+
       // Show error toast
       Toast.show({
         type: 'error', // Type of toast

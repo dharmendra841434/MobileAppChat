@@ -16,13 +16,21 @@ import ChatComponent from '../../components/ChatComponent';
 import {useSocket} from '../../utils/SocketProvider';
 import CustomBottomSheet from '../../components/CustomBottomSheet';
 import CustomText from '../../components/CustomText';
-import handleMediaSelection from '../../utils/helper';
+import handleMediaSelection, {
+  sendNotificationToUsers,
+} from '../../utils/helper';
 import useCloudinaryUpload from '../../hooks/useCloudinary';
 import {useQueryClient} from '@tanstack/react-query';
 import InfoPopup from '../../components/InfoPopup';
 import UserProfile from '../../components/peoples/UserProfile';
-import {getUserProfile} from '../../hooks/ApiRequiests/userApi';
+import {
+  getUserProfile,
+  sendNotifications,
+} from '../../hooks/ApiRequiests/userApi';
 import useInvalidateQuery from '../../hooks/useInvalidateQuery';
+import useUpdateReadMessages from '../../hooks/groupHooks/useUpdateReadMessages';
+import useDeleteGroup from '../../hooks/groupHooks/useDeleteGroup';
+import appFonts from '../../constant/appFonts';
 
 export default function StartChat({route}) {
   const [messages, setMessages] = useState('');
@@ -38,8 +46,16 @@ export default function StartChat({route}) {
   const [iButtonView, setiButtonView] = useState(false);
   const [showUserInfo, setShowUserInfo] = useState(null);
   const invalidateQuery = useInvalidateQuery();
+  const {updateReadsMessage} = useUpdateReadMessages();
 
-  const handleSendMessage = () => {
+  const {deleteGroup, deleteGroupSuccess} = useDeleteGroup({
+    setThreedot: () => {
+      navigation.goBack();
+      socket.emit('sendNotification', {message: 'this group is deleted'});
+    },
+  });
+
+  const handleSendMessage = async () => {
     if (input.trim()) {
       const data = {
         message: input,
@@ -59,8 +75,14 @@ export default function StartChat({route}) {
       // Add the new message object to the state
       setMessages(prevMessages => [...prevMessages, newMessage]);
       socket.emit('chatMessage', data);
+      socket.emit('sendNotification', {message: 'sending message'});
       setInput('');
       queryClient.invalidateQueries(['groupsList']);
+      await sendNotificationToUsers(
+        userDetails,
+        input,
+        group?.usersDeviceToken,
+      );
     }
   };
 
@@ -113,14 +135,29 @@ export default function StartChat({route}) {
       invalidateQuery('groupsList');
     });
 
-    socket.on('receiveMessages', ({messages}) => {
-      //console.log(messages, 'messages');
-      setMessages(messages);
-      setInput('');
+    socket.on('receiveMessages', ({messages, groupKey}) => {
+      // console.log(groupKey, group);
+      if (groupKey === group.groupKey) {
+        updateReadsMessage({
+          groupId: group?.groupKey,
+          userId: userDetails?.data?.user?._id,
+        });
+        setMessages(messages);
+        setInput('');
+      }
+    });
+
+    socket.on('receiveNotification', ({messages}) => {
+      // console.log(messages);
+      // if ((messages = 'this group is deleted')) {
+      //   navigation.goBack();
+      // }
     });
 
     return () => {
       socket.off('joinGroup');
+      socket.off('receiveMessages');
+      socket.off('receiveNotification');
     };
   }, [socket]);
 
@@ -150,6 +187,10 @@ export default function StartChat({route}) {
   const handleViewProfile = async username => {
     const profile = await getUserProfile(username);
     setShowUserInfo(profile);
+  };
+
+  const handleDeleteGroup = async () => {
+    deleteGroup(group?.groupKey);
   };
 
   return (
@@ -213,7 +254,13 @@ export default function StartChat({route}) {
         )}
       />
 
-      <InfoPopup isOpen={iButtonView} setIsOpen={setiButtonView} />
+      <InfoPopup
+        isOpen={iButtonView}
+        setIsOpen={setiButtonView}
+        handleDeleteGroup={handleDeleteGroup}
+        userId={userDetails?.data?.user?._id}
+        groupKey={group?.owner}
+      />
 
       {/* Header */}
       <View
@@ -229,9 +276,9 @@ export default function StartChat({route}) {
             source={require('../../assets/images/back.webp')}
           />
         </TouchableOpacity>
-        <Text className="text-white px-3 capitalize text-lg font-bold">
+        <CustomText font="bold" className="text-white px-3 capitalize text-lg ">
           {group?.groupName}
-        </Text>
+        </CustomText>
         <View className="flex-row space-x-4">
           <TouchableOpacity
             activeOpacity={0.7}
@@ -273,9 +320,12 @@ export default function StartChat({route}) {
             />
           </TouchableOpacity>
           <TextInput
-            placeholder="Message"
+            placeholder="Enter your message"
             value={input}
             onChangeText={setInput}
+            multiline={true}
+            numberOfLines={3}
+            style={{fontFamily: appFonts.Typo_Round_Regular}}
             className="flex-1 mx-2 px-4 py-4 bg-white rounded-2xl border border-gray-300 text-black"
           />
           <TouchableOpacity

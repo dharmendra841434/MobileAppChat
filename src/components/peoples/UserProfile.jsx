@@ -27,7 +27,7 @@ const UserProfile = ({
     navigation.navigate('login'); // Navigate to login screen if needed
   };
 
-  console.log(user?.username === currentUser?.user?.username);
+  console.log(user?.username === currentUser?.user?.username, 'jghfyfyf');
 
   return (
     <View className="flex-1 rounded-t-2xl items-center justify-center bg-gray-100 p-4">
@@ -35,8 +35,9 @@ const UserProfile = ({
         source={{uri: user?.profile_pic}}
         className="w-32 h-32 rounded-full border-4 border-white shadow-md"
       />
-      <CustomText className="mt-4 text-xl font-bold text-gray-800">
-        {user?.full_name}
+      <CustomText font="bold" className="mt-4 text-2xl  text-gray-800">
+        {user?.full_name?.split('')[0].toUpperCase() +
+          user?.full_name?.slice(1)}
       </CustomText>
       <CustomText className="text-gray-500">@{user?.username}</CustomText>
 

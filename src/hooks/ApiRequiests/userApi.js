@@ -89,6 +89,36 @@ export const cancelRecivedFriendRequest = async payload => {
 
 // Function to fetch all users data
 export const getPeoplesChats = async query => {
-  const response = await axiosInstance.get(`/auth/friends-chat`);
+  const response = await axiosInstance.get(`/chat/friends-chat`);
+  return response.data || response; // Assuming the response contains the data
+};
+
+// Function to fetch all users data
+export const sendNotifications = async payload => {
+  const response = await axiosInstance.post(`/send-notification`, payload);
+  return response.data || response; // Assuming the response contains the data
+};
+
+// Function to mark all messages as read
+export const markAllReadMsg = async payload => {
+  const response = await axiosInstance.put(
+    `/group/mark-all-messages-read`,
+    payload,
+  );
+  return response.data || response; // Assuming the response contains the data
+};
+
+// Function to fetch all users data
+export const markasAllReadChatMsg = async payload => {
+  // console.log(payload, "khjgg");
+  const response = await axiosInstance.put(`/chat/mark-as-read`, payload);
+  return response.data || response; // Assuming the response contains the data
+};
+
+// Function to delete a group
+export const deleteGroupRequest = async groupKey => {
+  const response = await axiosInstance.post(`/group/delete-group`, {
+    groupKey: groupKey,
+  });
   return response.data || response; // Assuming the response contains the data
 };

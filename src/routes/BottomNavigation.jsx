@@ -41,7 +41,7 @@ const BottomNavigation = () => {
         tabBarLabelStyle: {
           fontSize: 11,
           marginBottom: 10,
-          fontFamily: appFonts?.bold,
+          fontFamily: appFonts.Typo_Round_Bold,
           backgroundColor: 'rgba(0,0,0,0)',
         },
         tabBarHideOnKeyboard: true,

@@ -1,7 +1,5 @@
-'use client';
-
 import {useQuery} from '@tanstack/react-query';
-import {getPeoplesChats, getUserDetails} from '../ApiRequiests/userApi';
+import {getPeoplesChats} from '../ApiRequiests/userApi';
 
 const useGetAllPeoplesChat = () => {
   // Use the createdBy value in the query

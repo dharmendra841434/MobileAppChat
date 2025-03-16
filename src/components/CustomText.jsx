@@ -7,31 +7,31 @@ const CustomText = ({font = '', children, className = '', style, ...props}) => {
   let fontFamily;
   switch (font) {
     case 'bold':
-      fontFamily = appFonts.Ubuntu.Bold;
+      fontFamily = appFonts.Typo_Round_Bold;
       break;
-    case 'boldItalic':
-      fontFamily = appFonts.Ubuntu.BoldItalic;
+    // case 'boldItalic':
+    //   fontFamily = appFonts.;
+    //   break;
+    // case 'medium':
+    //   fontFamily = appFonts.Ubuntu.Medium;
+    //   break;
+    // case 'mediumItalic':
+    //   fontFamily = appFonts.Ubuntu.MediumItalic;
+    //   break;
+    // case 'italic':
+    //   fontFamily = appFonts.Ubuntu.Italic;
+    //   break;
+    // case 'light':
+    //   fontFamily = appFonts.Ubuntu.Light;
+    //   break;
+    case 'thin':
+      fontFamily = appFonts.Typo_Round_Thin;
       break;
-    case 'medium':
-      fontFamily = appFonts.Ubuntu.Medium;
-      break;
-    case 'mediumItalic':
-      fontFamily = appFonts.Ubuntu.MediumItalic;
-      break;
-    case 'italic':
-      fontFamily = appFonts.Ubuntu.Italic;
-      break;
-    case 'light':
-      fontFamily = appFonts.Ubuntu.Light;
-      break;
-    case 'lightItalic':
-      fontFamily = appFonts.Ubuntu.LightItalic;
-      break;
-    case 'jockey':
-      fontFamily = appFonts.JockeyOne;
-      break;
+    // case 'jockey':
+    //   fontFamily = appFonts.JockeyOne;
+    //   break;
     default:
-      fontFamily = appFonts.Ubuntu.Regular;
+      fontFamily = appFonts.Typo_Round_Regular;
   }
 
   return (

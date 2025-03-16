@@ -8,8 +8,8 @@ import useGetUserDetails from '../../hooks/authenticationHooks/useGetUserDetails
 import GroupsListCard from '../../components/groups/GroupsList';
 import {useSocket} from '../../utils/SocketProvider';
 import useInvalidateQuery from '../../hooks/useInvalidateQuery';
-import UserProfile from '../../components/peoples/UserProfile';
-import CustomBottomSheet from '../../components/CustomBottomSheet';
+import appFonts from '../../constant/appFonts';
+import CustomText from '../../components/CustomText';
 
 const tabs = ['All', 'Unread', 'Favourites', 'Groups'];
 
@@ -18,9 +18,7 @@ export default function ChatsScreen() {
   const {userDetails} = useGetUserDetails();
   const {groupsList, isLoading} = useGetUserGroupsList();
   const invalidateQuery = useInvalidateQuery();
-  const [viewProfile, setViewProfile] = useState(false);
-  //console.log(groupsList);
-  // Update allChats when userDetails or groupsList change
+
   const socket = useSocket();
   useEffect(() => {
     if (
@@ -39,26 +37,13 @@ export default function ChatsScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <TopHeader title="Chats" handleViewProfile={() => setViewProfile(true)} />
-
-      <CustomBottomSheet
-        isVisible={viewProfile}
-        onClose={() => setViewProfile(false)}
-        sheetHeight={350}
-        renderContent={() => (
-          <>
-            <UserProfile
-              user={userDetails?.data?.user}
-              setView={setViewProfile}
-            />
-          </>
-        )}
-      />
+      <TopHeader title="Chats" />
 
       {/* Search */}
       <View className="px-4 py-2">
         <TextInput
-          placeholder="Ask Meta AI or Search"
+          placeholder="Here search your chats"
+          style={{fontFamily: appFonts.Typo_Round_Regular}}
           placeholderTextColor="#6b7280"
           className="h-14 px-4 bg-gray-300 rounded-lg text-white"
         />
@@ -73,12 +58,12 @@ export default function ChatsScreen() {
             className={`px-6 py-2 rounded-full ${
               activeTab === tab ? 'bg-primary' : 'bg-gray-400'
             } mx-1`}>
-            <Text
+            <CustomText
               className={`${
                 activeTab === tab ? 'text-background' : 'text-gray-300'
               }`}>
               {tab}
-            </Text>
+            </CustomText>
           </TouchableOpacity>
         ))}
       </View>

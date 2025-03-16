@@ -4,6 +4,7 @@ import {useMutation} from '@tanstack/react-query';
 import {checkUsernameRequest} from '../hooks/ApiRequiests/userApi';
 import CustomText from './CustomText';
 import appColors from '../constant/appColors';
+import appFonts from '../constant/appFonts';
 
 const UserNameInput = ({
   setInput,
@@ -57,7 +58,7 @@ const UserNameInput = ({
   return (
     <View className=" relative">
       {/* Username Label */}
-      <CustomText font="bold" className="text-white text-lg my-2 ml-3">
+      <CustomText font="bold" className="text-white  my-2 ml-3">
         Username
       </CustomText>
 
@@ -72,6 +73,7 @@ const UserNameInput = ({
         value={userName}
         onChangeText={handOnchange}
         onFocus={handleOnFocus}
+        style={{fontFamily: appFonts.Typo_Round_Regular}}
       />
 
       <View className=" absolute top-0 bottom-0 right-0 justify-center pr-3 pt-9">

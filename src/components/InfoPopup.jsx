@@ -9,7 +9,13 @@ import {
 } from 'react-native';
 import CustomText from './CustomText';
 
-const InfoPopup = ({isOpen, setIsOpen}) => {
+const InfoPopup = ({
+  isOpen,
+  setIsOpen,
+  handleDeleteGroup,
+  userId,
+  groupKey,
+}) => {
   // Toggle the popup
   const togglePopup = () => {
     setIsOpen(!isOpen);
@@ -36,9 +42,13 @@ const InfoPopup = ({isOpen, setIsOpen}) => {
                   <CustomText>Info</CustomText>
                 </TouchableOpacity>
                 <View className=" bg-gray-300 h-[1px] w-full " />
-                <TouchableOpacity className="px-5 py-3 ">
-                  <CustomText>Delete</CustomText>
-                </TouchableOpacity>
+                {userId === groupKey && (
+                  <TouchableOpacity
+                    onPress={handleDeleteGroup}
+                    className="px-5 py-3 ">
+                    <CustomText>Delete</CustomText>
+                  </TouchableOpacity>
+                )}
               </View>
             </TouchableWithoutFeedback>
           </View>

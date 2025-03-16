@@ -1,5 +1,7 @@
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Toast from 'react-native-toast-message';
+import messaging from '@react-native-firebase/messaging';
+import {sendNotifications} from '../hooks/ApiRequiests/userApi';
 
 export const timeAgo = (timestamp: any) => {
   const now = new Date();
@@ -97,3 +99,27 @@ export function countUnreadMessages(messages: any, userId: any) {
 
   return messages.filter(message => !message.read.includes(userId)).length;
 }
+
+export const sendNotificationToUsers = async (
+  userDetails: any,
+  input: any,
+  GroupDeviceTokens: any,
+) => {
+  try {
+    // Get the current device token
+    const currentDeviceToken = await messaging().getToken();
+    const usersDeviceTokens = GroupDeviceTokens.filter(
+      (token: any) => token !== currentDeviceToken,
+    );
+
+    console.log(usersDeviceTokens, 'tk');
+
+    await sendNotifications({
+      title: `New Message from ${userDetails?.data?.user?.full_name}`,
+      body: input,
+      deviceTokens: usersDeviceTokens,
+    });
+  } catch (error) {
+    console.log('Error sending notification:', error);
+  }
+};

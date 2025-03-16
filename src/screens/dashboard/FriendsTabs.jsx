@@ -12,6 +12,7 @@ import useInvalidateQuery from '../../hooks/useInvalidateQuery';
 import PendingUserCard from '../../components/PendingUserCard';
 import ActiveUserCard from '../../components/ActiveUserCard';
 import useGetAllPeoplesChat from '../../hooks/authenticationHooks/useGetAllPeoplesChat';
+import appFonts from '../../constant/appFonts';
 
 const FriendsTabs = () => {
   const [activeTab, setActiveTab] = useState(1);
@@ -19,7 +20,7 @@ const FriendsTabs = () => {
   const navigation = useNavigation();
   const [accpetLoading, setAcceptLoading] = useState(false);
   const [cancelLoading, setCancelLoading] = useState(false);
-  const {peoplesChatLists} = useGetAllPeoplesChat();
+  const {peoplesChatLists, error} = useGetAllPeoplesChat();
 
   const invalidateQuery = useInvalidateQuery();
 
@@ -52,7 +53,7 @@ const FriendsTabs = () => {
 
   const handleStartConversation = user => {
     // console.log(user?._id);
-    // console.log(peoplesChatLists);
+    //  console.log(error);
     const userChat = peoplesChatLists?.find(
       chat =>
         chat?.participants?.some(
@@ -79,8 +80,9 @@ const FriendsTabs = () => {
       {/* Search Input */}
       <View className="px-4 py-2">
         <TextInput
-          placeholder="Ask Meta AI or Search"
+          placeholder="Here search your peoples"
           placeholderTextColor="#6b7280"
+          style={{fontFamily: appFonts.Typo_Round_Regular}}
           className="h-14 px-4 bg-gray-300 rounded-lg text-white"
         />
       </View>

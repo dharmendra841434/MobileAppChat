@@ -14,6 +14,8 @@ import {useNavigation} from '@react-navigation/native';
 import PasswordInputField from '../../components/PasswordInput';
 import useUserRegister from '../../hooks/authenticationHooks/useUserRegister';
 import UserNameInput from '../../components/UserNameInput';
+import appFonts from '../../constant/appFonts';
+import LottieView from 'lottie-react-native';
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -122,19 +124,24 @@ const RegisterScreen = () => {
         <View className="flex-1 bg-background">
           {/* Header */}
           <View className="mb-8 flex-row justify-between items-center">
-            <CustomText font="bold" className="text-white text-3xl font-bold">
-              PingPong.chat
+            <CustomText font="bold" className="text-white text-3xl">
+              PingPong
             </CustomText>
-            <Image
-              source={require('../../assets/images/logo.webp')}
-              className="h-10 w-10"
+            <LottieView
+              style={{height: 70, width: 70, marginTop: '-5%'}}
+              source={require('../../assets/images/logo.json')}
+              autoPlay
+              loop
             />
           </View>
 
           {/* Welcome */}
-          <View className="mb-6 mt-20">
-            <CustomText font="bold" className="text-white text-3xl mb-1">
+          <View className=" my-7">
+            <CustomText font="bold" className="text-white text-2xl mb-1">
               Create Account Now!
+            </CustomText>
+            <CustomText className="text-white ">
+              Join us and unlock endless possibilities!
             </CustomText>
           </View>
 
@@ -147,7 +154,7 @@ const RegisterScreen = () => {
             />
 
             <View>
-              <CustomText font="bold" className="text-white text-lg my-2 ml-3">
+              <CustomText font="bold" className="text-white  my-2 ml-3">
                 Full Name
               </CustomText>
               <TextInput
@@ -159,6 +166,7 @@ const RegisterScreen = () => {
                 value={fullName}
                 onChangeText={setFullName}
                 onFocus={() => handleFocus('fullName')}
+                style={{fontFamily: appFonts.Typo_Round_Regular}}
               />
               {errors.fullName && (
                 <CustomText className="text-red-500 ml-3 mt-1">
@@ -177,6 +185,7 @@ const RegisterScreen = () => {
 
             <PasswordInputField
               placeholder="Confirm password"
+              title="Confirm Password"
               value={confirmPassword}
               onChangeText={handleConfirmPasswordChange}
               isError={!!errors.confirmPassword}
@@ -189,10 +198,8 @@ const RegisterScreen = () => {
             className="bg-primary py-4 rounded-full my-6"
             disabled={userRegisterLoading}
             onPress={handleRegister}>
-            <CustomText
-              font="bold"
-              className="text-black text-center text-lg font-bold">
-              {userRegisterLoading ? 'Signing Up...' : 'Sign Up'}
+            <CustomText font="bold" className="text-black text-center text-lg ">
+              {userRegisterLoading ? 'Signing Up---' : 'Sign Up'}
             </CustomText>
           </TouchableOpacity>
 
