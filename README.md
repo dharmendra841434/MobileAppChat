@@ -2,6 +2,25 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 # Getting Started
 
+
+## Screenshots
+Here are some screenshots showcasing the app's functionality:
+
+<div align="center">
+   <img src="./src/assets/screenshots/img1.png" width="300" />
+   <img src="./src/assets/screenshots/img2.png" width="300" />
+   <img src="./src/assets/screenshots/img3.png" width="300" />
+</div>
+
+<div align="center">
+    <img src="./src/assets/screenshots/img4.png" width="300" />
+   <img src="./src/assets/screenshots/img5.png" width="300" />
+   <img src="./src/assets/screenshots/img6.png" width="300" />
+     <img src="./src/assets/screenshots/img7.png" width="300" />
+   <img src="./src/assets/screenshots/img8.png" width="300" />
+  <img src="./src/assets/screenshots/img9.png" width="300" />
+</div>
+
 > **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
 
 ## Step 1: Start Metro
