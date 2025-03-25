@@ -4,19 +4,14 @@ import appColors from '../../constant/appColors';
 import CustomText from '../../components/CustomText';
 import {useNavigation} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
-import {
-  GoogleSignin,
-  statusCodes,
-  isErrorWithCode,
-} from '@react-native-google-signin/google-signin';
 import showToast from '../../utils/showToast';
 
-GoogleSignin.configure({
-  webClientId:
-    '603256322898-0in6jp9mmsso3p1fahj9gc5cf9anajkl.apps.googleusercontent.com',
-  scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-  forceCodeForRefreshToken: false,
-});
+// GoogleSignin.configure({
+//   webClientId:
+//     '603256322898-0in6jp9mmsso3p1fahj9gc5cf9anajkl.apps.googleusercontent.com',
+//   scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+//   forceCodeForRefreshToken: false,
+// });
 
 const OnboardingScreen = () => {
   const navigation = useNavigation();
